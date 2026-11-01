@@ -18,11 +18,16 @@ public class GerenciadorUsuarios
         if(usuario == null) return false;
         return usuario.compararToken(token);
     }
-    public boolean login(String userName, String senha) throws NoSuchAlgorithmException, UnsupportedEncodingException
+    public boolean login(String userName, String senha, Token token) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
         Usuario usuario = usuarios.get(userName);
         if(usuario == null) return false;
-        return usuario.compararSenha(senha);
+        if(usuario.compararSenha(senha))
+        {
+            token.setToken(usuario.getToken());
+            return true;
+        }
+        return false;
     }
     public boolean cadastra(String userName, String senha) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {

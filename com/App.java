@@ -1,25 +1,87 @@
 package com;
+
 import java.io.UnsupportedEncodingException;
-import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.Scanner;
 
 public class App{
-    public static void main(String[] args) throws NoSuchAlgorithmException, UnsupportedEncodingException 
+    private static GerenciadorUsuarios gerenciadorUsuarios = new GerenciadorUsuarios();
+    private static Token token = new Token();
+    public static Scanner scanner = new Scanner(System.in);
+    public static void main(String[] args)
     {
-        String senha = "1234dkfdlkk";
-        MessageDigest algoritimoMD5 = MessageDigest.getInstance("MD5");
-        MessageDigest algoritimoSHA256 = MessageDigest.getInstance("SHA-256");
-        byte messageDigestSha256[] = algoritimoSHA256.digest(senha.getBytes("UTF-8"));
-        byte messageDigestMD5[] = algoritimoMD5.digest(senha.getBytes("UTF-8"));
-        System.out.println(messageDigestMD5);
-        System.out.println(messageDigestSha256);
-        StringBuilder hexString = new StringBuilder();
-        for(byte b : messageDigestSha256)
+        boolean rodando = true;
+        while (rodando)
         {
-            hexString.append(String.format("%02X", 0xFF & b));
+            menu();
+            System.out.println(token);
+            try {
+                switch (scanner.nextInt()) {
+                    case 1:
+                        scanner.nextLine();
+                        cadastro();
+                        break;
+                    case 2:
+                        scanner.nextLine();
+                        login();
+                        break;
+                    case 3:
+                        rodando = false;
+                        break;
+                    default:
+                        System.out.println("invalido");
+                        break;
+                }
+                
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+                scanner.next();
+            }
+            
         }
-        String senhaHex = hexString.toString();
-        System.out.println(senhaHex);
+        scanner.close();
+    }
+
+    public static void menu()
+    {
+        System.out.println(
+                "======MENu=======\n"
+                + "(1) Cadastro: \n"
+                + "(2) Login:    \n"
+                + "(3) Encerrar: \n"
+                );
+    }
+
+    public static  void login() throws UnsupportedEncodingException, NoSuchAlgorithmException
+    {
+        System.out.println("Digite o nome do Usuario: ");
+        String userName = scanner.nextLine();
+        if(!gerenciadorUsuarios.login(userName, token))
+        {
+            System.out.println("Digite a senha: ");
+            String senha = scanner.nextLine();
+            if(!gerenciadorUsuarios.login(userName,senha, token))
+            {
+                System.out.println("Usuario ou senha invalidos!");
+                return;
+            }
+        }
+        System.out.println("Login Realizado com Sucesso!");
+    }
+
+    public static  void cadastro() throws UnsupportedEncodingException, NoSuchAlgorithmException
+    {
+        System.out.println("Digite um nome para usuario: ");
+        String userName = scanner.nextLine();
+        System.out.println("Digite uma senha para usuario: ");
+        String senha = scanner.nextLine();
+        if (!gerenciadorUsuarios.cadastra(userName, senha))
+        {
+            System.out.println("Usuario ja existe!");
+            return;
+        }
+        System.out.println("Usuario criado com sucesso!");
+
     }
 }
 

@@ -22,13 +22,16 @@ public class Token
         if(
             this.localDateTime.isBefore(LocalDateTime.now()) &&
             this.token.equals(token.getToken())
-        ) return true; 
+        ){
+            this.genToken();
+            return false;
+        }
 
-        this.genToken();
-        return false;
+        return this.token.equals(token.getToken());
     }
     @Override
     public String toString() {
+//        return "UUID: " + getToken() + " Data de Expiracao: " + this.localDateTime.toString(); 
         return this.token;
     }
 }
