@@ -5,12 +5,12 @@ import java.security.NoSuchAlgorithmException;
 public class Usuario
 {
     private String userName;
-    private String senhaHash;
+    private Senha senhaHash;
     private Token token;
 
     public Usuario(String userName, String senha) throws NoSuchAlgorithmException, UnsupportedEncodingException
     {
-        this.senhaHash = GerarHash.genHash(senha);
+        this.senhaHash = new Senha(senha);
         this.userName = userName;
         this.token = new Token();
         this.token.genToken();
@@ -19,7 +19,7 @@ public class Usuario
     public boolean compararToken(Token token) { return this.token.equals(token); }
     public String getToken() {return this.token.toString(); }
     public boolean compararSenha(String senha) throws NoSuchAlgorithmException, UnsupportedEncodingException
-    { return this.senhaHash.equals(GerarHash.genHash(senha)); }
+    { return this.senhaHash.comparHash(senha); }
 
     @Override
     public boolean equals(Object obj) {

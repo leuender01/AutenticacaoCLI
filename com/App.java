@@ -5,7 +5,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Scanner;
 
 public class App{
-    private static GerenciadorUsuarios gerenciadorUsuarios = new GerenciadorUsuarios();
+    private static AutenticadorService gerenciadorUsuarios = new AutenticadorService();
     private static Token token = new Token();
     public static Scanner scanner = new Scanner(System.in);
     public static void main(String[] args)
@@ -56,16 +56,17 @@ public class App{
     {
         System.out.println("Digite o nome do Usuario: ");
         String userName = scanner.nextLine();
-        if(!gerenciadorUsuarios.login(userName, token))
+        if(!gerenciadorUsuarios.autenticar(userName, token))
         {
             System.out.println("Digite a senha: ");
             String senha = scanner.nextLine();
-            if(!gerenciadorUsuarios.login(userName,senha, token))
+            if(!gerenciadorUsuarios.autenticar(userName,senha, token))
             {
                 System.out.println("Usuario ou senha invalidos!");
                 return;
             }
         }
+        System.out.println("Token gerado com 2 minutos de expiração!");
         System.out.println("Login Realizado com Sucesso!");
     }
 
@@ -81,7 +82,6 @@ public class App{
             return;
         }
         System.out.println("Usuario criado com sucesso!");
-
     }
 }
 
